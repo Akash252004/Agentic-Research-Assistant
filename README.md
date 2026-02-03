@@ -49,39 +49,32 @@ flowchart TD
     classDef agent fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000;
     classDef db fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000;
 
-    subgraph UI [👤 User Interface]
+    subgraph System [🧠 Agentic Research Assistant System]
         direction TB
-        Upload(📄 PDF Upload)
-        Query(❓ User Query)
-        Result(✅ Final Answer)
-    end
-    class Upload,Query,Result user
+        
+        %% Nodes
+        Upload(📄 PDF Upload):::user
+        Query(❓ User Query):::user
+        Result(✅ Final Answer):::user
+        
+        Ingest[⚙️ Ingestion Engine]:::agent
+        Planner[🧠 Planner Agent]:::agent
+        Verifier[🕵️ Verifier Agent]:::agent
+        Synthesizer[📝 Synthesizer Agent]:::agent
+        
+        Endee[(Endee Vector DB)]:::db
 
-    subgraph Agents [🤖 Multi-Agent System]
-        direction TB
-        Ingest[⚙️ Ingestion Engine]
-        Planner[🧠 Planner Agent]
-        Verifier[🕵️ Verifier Agent]
-        Synthesizer[📝 Synthesizer Agent]
+        %% Data Flow
+        Upload --> Ingest
+        Ingest -->|1. Chunk & Embed| Endee
+        
+        Query --> Planner
+        Planner -->|2. Sub-Queries| Endee
+        
+        Endee -->|3. Retrieval| Verifier
+        Verifier -->|4. Verified Facts| Synthesizer
+        Synthesizer -->|5. Response| Result
     end
-    class Ingest,Planner,Verifier,Synthesizer agent
-
-    subgraph DB [🗄️ Infrastructure]
-        direction TB
-        Endee[(Endee Vector DB)]
-    end
-    class Endee db
-
-    %% Data Flow
-    Upload --> Ingest
-    Ingest -->|1. Chunk & Embed| Endee
-    
-    Query --> Planner
-    Planner -->|2. Sub-Queries| Endee
-    
-    Endee -->|3. Retrieval| Verifier
-    Verifier -->|4. Verified Facts| Synthesizer
-    Synthesizer -->|5. Response| Result
 ```
 
 ---
