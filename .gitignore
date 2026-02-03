@@ -8,8 +8,6 @@ venv/
 # Docker
 .dockerignore
 
-# Streamlit
-.streamlit/
 
 # Data
 static/papers/*
