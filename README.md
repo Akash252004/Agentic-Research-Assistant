@@ -43,39 +43,45 @@ Imagine searching a 1,000-page book:
 Here is how the system processes your question end-to-end:
 
 ```mermaid
-graph TD
+flowchart TD
     %% Styling
-    classDef user fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef agent fill:#fff3e0,stroke:#e65100,stroke-width:2px;
-    classDef db fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef user fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef agent fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000;
+    classDef db fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000;
 
-    subgraph User_Space [👤 Client / User Interface]
-        Upload(📄 PDF Upload) --> Ingest
-        Query(❓ User Query) --> Planner
+    subgraph UI [👤 User Interface]
+        direction TB
+        Upload(📄 PDF Upload)
+        Query(❓ User Query)
         Result(✅ Final Answer)
-        class Upload,Query,Result user
     end
+    class Upload,Query,Result user
 
-    subgraph Agent_Orchestrator [🤖 Multi-Agent System]
+    subgraph Agents [🤖 Multi-Agent System]
+        direction TB
         Ingest[⚙️ Ingestion Engine]
         Planner[🧠 Planner Agent]
         Verifier[🕵️ Verifier Agent]
         Synthesizer[📝 Synthesizer Agent]
-        class Ingest,Planner,Verifier,Synthesizer agent
     end
+    class Ingest,Planner,Verifier,Synthesizer agent
 
-    subgraph Vector_Infrastructure [🗄️ Endee Vector Database]
-        Store[(Encrypted Storage)]
-        Search[(Semantic Search)]
-        class Store,Search db
+    subgraph DB [🗄️ Infrastructure]
+        direction TB
+        Endee[(Endee Vector DB)]
     end
+    class Endee db
 
     %% Data Flow
-    Ingest -->|1. Chunk & Embed| Store
-    Planner -->|2. Sub-Queries| Search
-    Search -->|3. Retrieval| Verifier
+    Upload --> Ingest
+    Ingest -->|1. Chunk & Embed| Endee
+    
+    Query --> Planner
+    Planner -->|2. Sub-Queries| Endee
+    
+    Endee -->|3. Retrieval| Verifier
     Verifier -->|4. Verified Facts| Synthesizer
-    Synthesizer -->|5. Generated Response| Result
+    Synthesizer -->|5. Response| Result
 ```
 
 ---
