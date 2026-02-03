@@ -1,0 +1,11 @@
+streamlit
+groq
+sentence-transformers
+requests
+pypdf
+python-dotenv
+httpx
+pydantic
+numpy
+orjson
+msgpack

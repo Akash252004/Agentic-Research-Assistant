@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Docker
+.dockerignore
+
+# Streamlit
+.streamlit/
+
+# Data
+static/papers/*
+!static/papers/.gitkeep
+
+# Logs
+*.log
